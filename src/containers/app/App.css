@@ -2,9 +2,10 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.Home-image {
+  height: 50vmin;
+  border: 5px solid black;
+  border-radius: 25px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -14,7 +15,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #86592d;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -22,6 +23,7 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
 .App-link {
