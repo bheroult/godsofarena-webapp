@@ -1,0 +1,7 @@
+.NavBar {
+    height: 70px;
+    width: 100%;
+    background-color: #2d5a86;
+    position: fixed;
+    text-align: center;
+}

@@ -1,11 +1,18 @@
 import React from 'react';
 
+import NavBar from '../../components/NavBar';
+
 import './ludus.css';
 
 class Ludus extends React.Component {
     render() {
         return (
-            <div></div>
+            <div>
+                <NavBar />
+                <div className="Ludus">
+                    bonjour
+                </div>
+            </div>
         );
     }
 }

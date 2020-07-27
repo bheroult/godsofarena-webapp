@@ -8,7 +8,6 @@ import Emperor from './containers/emperor';
 const App = () => (
     <div id="app">
         <Router>
-
             <div id="page">
                 <Switch>
                     <Route path="/" exact component={Home} />
