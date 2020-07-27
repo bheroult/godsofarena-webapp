@@ -1,4 +1,4 @@
-.App {
+.Home {
   text-align: center;
 }
 
@@ -9,12 +9,12 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+  .Home-logo {
+    animation: Home-logo-spin infinite 20s linear;
   }
 }
 
-.App-header {
+.Home-header {
   background-color: #86592d;
   min-height: 100vh;
   display: flex;
@@ -26,11 +26,11 @@
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
-.App-link {
+.Home-link {
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
+@keyframes Home-logo-spin {
   from {
     transform: rotate(0deg);
   }

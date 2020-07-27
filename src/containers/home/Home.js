@@ -1,13 +1,13 @@
 import React from 'react';
 import homeImage from '../../assets/gladiator-fight.jpg';
-import './App.css';
+import './Home.css';
 
-class App extends React.Component {
+class Home extends React.Component {
 
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
+      <div className="Home" id="home">
+        <header className="Home-header">
           <img src={homeImage} className="Home-image" alt="Gladiators' fight" />
 
           <h1>Bienvenue sur Gods of Arena !</h1>
@@ -25,4 +25,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default Home;
