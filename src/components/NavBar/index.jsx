@@ -8,10 +8,11 @@ const LudusButton = withStyles(() => ({
     root: {
         color: 'white',
         '&:hover': {
-            backgroundColor: '#2d8659',
+            backgroundColor: '#2e862d',
         },
-        margin: '15px 15px',
-        width: "200px",
+        //margin: '15px 15px',
+        width: "30%",
+        height: '100%',
     },
 }))(Button);
 
@@ -19,10 +20,11 @@ const EmperorButton = withStyles(() => ({
     root: {
         color: 'white',
         '&:hover': {
-            backgroundColor: '#592d86',
+            backgroundColor: '#862d86',
         },
-        margin: '15px 15px',
-        width: "200px",
+        //margin: '15px 15px',
+        width: "30%",
+        height: '100%',
     },
 }))(Button);
 
@@ -32,8 +34,9 @@ const HomeButton = withStyles(() => ({
         '&:hover': {
             backgroundColor: '#86592d',
         },
-        margin: '15px 15px',
-        width: "200px",
+        //margin: '15px 15px',
+        width: "30%",
+        height: '100%',
     },
 }))(Button);
 

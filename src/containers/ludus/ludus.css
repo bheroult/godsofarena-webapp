@@ -1,12 +1,28 @@
-.Ludus {
+#content {
     background-color: #2d8659;
+}
+
+.Ludus {
+    margin-left: 5%;
+    margin-right: 5%;
     text-align: center;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     font-size: calc(10px + 2vmin);
     color: white;
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    min-height: 100vh;
+}
+
+.GladiatorTypes {
+    min-height: 45vh;
+    display: flex;
+    flex-direction: line;
+    align-items: center;
+    justify-content: space-between;
+    font-size: calc(10px + 2vmin);
+    color: white;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+.InfoSection {
+    padding-top: 100px;
 }
