@@ -36,10 +36,10 @@ class Home extends React.Component {
 
         <h1>Bienvenue sur Gods of Arena !</h1>
 
-        <p>Grâce à ce système innovant, vous, Ludi, pourrez proposer des gladiateurs pour les jeux. <br />
+        <p>Grâce à ce système innovant, vous, <i>Ludi</i>, pourrez proposer des gladiateurs pour les jeux. <br />
           Et vous, ô Empereur, pourrez choisir parmi les gladiateurs proposés ceux qui combattront dans l'arène !</p>
         <p>
-          Bon jeux à tous !
+          Bons jeux à tous !
         </p>
 
         <div className="Buttons">

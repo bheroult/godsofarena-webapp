@@ -27,12 +27,16 @@ class Ludus extends React.Component {
             tempList.splice(index, 1);
         }
         else if (name === 'Animal') {
+            console.log("act : " + this.state.animal);
             // animal is a specific choice
             var activation = !this.state.animal;
+            console.log("temp : " + activation);
             this.setState({
                 animal: activation
             });
             localStorage.setItem('animalActivated', activation);
+            console.log("temp : " + this.state.animal);
+
         }
         else if (this.state.chosenTypes.length < 2) {
             // add the element only if possible
@@ -54,8 +58,13 @@ class Ludus extends React.Component {
         });
         localStorage.setItem('chosenTypes', []);
         localStorage.setItem('animalActivated', false);
+
+        // clear options also for Emperor side
+        localStorage.setItem('personnas',[]);
+        localStorage.setItem('confirmedChoices', false);
     }
 
+    // initialize interface with types and choices if some wehere stored already
     componentDidMount() {
         // get types list from API
         fetch(process.env.REACT_APP_API + '/types')
@@ -68,12 +77,20 @@ class Ludus extends React.Component {
         // check if choices were already made, and load them from local storage if so
         var animalActivated, chosenTypes;
         animalActivated = localStorage.getItem('animalActivated');
-        chosenTypes = localStorage.getItem('chosenTypes');
-        if (animalActivated == null) {
+        if (animalActivated == null || animalActivated === "false") {
             animalActivated = false;
         }
-        if (chosenTypes == null) {
+        else {
+            animalActivated = true;
+        }
+
+        chosenTypes = localStorage.getItem('chosenTypes');
+        if (chosenTypes == null || chosenTypes === "") {
             chosenTypes = [];
+        }
+        else{
+            // convert datas string to list
+            chosenTypes = chosenTypes.split(",");
         }
         this.setState({
             chosenTypes: chosenTypes,
@@ -83,12 +100,14 @@ class Ludus extends React.Component {
 
 
     render() {
+        var activatedAnimal = this.state.animal;
+        
         return (
-            <div id="content">
+            <div id="ludusContent">
                 <NavBar />
                 <div className="Ludus">
                     <div className="InfoSection">
-                        Choisissez les types que vous souhaitez mettre à disposition de l'Empereur. <br/>
+                        Choisissez les types de gladiateur que vous souhaitez proposez à l'Empereur. <br/>
                         Vous devez choisir 2 types de gladiateur, et vous pouvez activez le type animal si vous le souhaitez.
                     </div>
                     <div className="GladiatorTypes">
@@ -100,7 +119,7 @@ class Ludus extends React.Component {
                     <div className="ChosenTypes">
                         {this.state.chosenTypes.length === 0 ? "Vous n'avez choisi aucun type." : "Vous avez choisi les types suivants :"}<br />
                         {this.state.chosenTypes.toString()} <br />
-                        Le type 'Animal' {this.state.animal ? " est activé." : "n'est pas activé."}
+                        Le type 'Animal' {activatedAnimal === true ? " est activé." : "n'est pas activé."}
                     </div>
                     <br />
                     <Button id="deleteChoicesButton" variant="contained" color="secondary" onClick={this.clearChoices.bind(this)}>
