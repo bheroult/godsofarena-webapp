@@ -1,12 +1,29 @@
-.Emperor {
+#emperorContent {
     background-color: #592d86;
+}
+
+.Emperor {
+    margin-left: 5%;
+    margin-right: 5%;
     text-align: center;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+    font-size: calc(5px + 2vmin);
+    color: #C0C0C0;
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    min-height: 100vh;
+}
+
+.InfoDiv {
+    padding-top: 100px;
+    text-align: center;
+}
+
+
+.GladiatorChoices {
+    min-height: 35vh;
+    display: flex;
+    flex-direction: line;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    color: white;
+    padding-top: 30px;
 }
