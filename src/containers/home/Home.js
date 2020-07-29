@@ -34,7 +34,7 @@ class Home extends React.Component {
       <div className="Home" id="home">
         <img src={homeImage} className="Home-image" alt="Gladiators' fight" />
 
-        <h1>Bienvenue sur Gods of Arena !</h1>
+        <h2>Bienvenue sur Gods of Arena !</h2>
 
         <p>Grâce à ce système innovant, vous, <i>Ludi</i>, pourrez proposer des gladiateurs pour les jeux. <br />
           Et vous, ô Empereur, pourrez choisir parmi les gladiateurs proposés ceux qui combattront dans l'arène !</p>

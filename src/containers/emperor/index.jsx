@@ -20,15 +20,29 @@ class Emperor extends React.Component {
         };
     }
 
-    handlePersonnaChoices(type, personna) {
+    handlePersonnaChoices(personna) {
         var tempPersonnas = this.state.personnas;
+        
+        // check if personna choice was already registered
+        var toDelete = null
+        for(let i=0 ; i<tempPersonnas.length ; i++){
+            if(personna.type === tempPersonnas[i].type){
+                toDelete = i;
+            }
+        }
+        // delete if necessary
+        if(toDelete !== null){
+            tempPersonnas.splice(toDelete, 1);
+        }
+
+        // add personna
         tempPersonnas.push(personna);
         this.setState({
             personnas: tempPersonnas,
         });
-        console.log('personna pushed : ' + JSON.stringify(personna));
     }
 
+    // allow the Emperor to validate choices made
     confirmChoices() {
         this.setState({
             confirmed: true,
@@ -37,6 +51,7 @@ class Emperor extends React.Component {
         localStorage.setItem('confirmedChoices', true);
     }
 
+    // allow to delete choices validated
     deleteChoices(){
         this.setState({
             confirmed: false,
@@ -50,6 +65,7 @@ class Emperor extends React.Component {
         // check if Ludi made choices already, and load them from local storage if so
         var animalActivated, chosenTypes, confirmationChoices, personnasChoices;
 
+        // whether animal is activated or not
         animalActivated = localStorage.getItem('animalActivated');
         if (animalActivated == null || animalActivated === "false") {
             animalActivated = false;
@@ -58,15 +74,7 @@ class Emperor extends React.Component {
             animalActivated = true;
         }
 
-        chosenTypes = localStorage.getItem('chosenTypes');
-        if (chosenTypes == null || chosenTypes === "") {
-            chosenTypes = [];
-        }
-        else {
-            // convert datas string to list
-            chosenTypes = chosenTypes.split(",");
-        }
-
+        // if choices where already confirmed by the Emperor
         confirmationChoices = localStorage.getItem('confirmedChoices');
         if (confirmationChoices == null || confirmationChoices === "false") {
             confirmationChoices = false;
@@ -75,6 +83,7 @@ class Emperor extends React.Component {
             confirmationChoices = true;
         }
 
+        // choices that where made and confirmed by the Emperor
         personnasChoices = localStorage.getItem('personnas');
         if (personnasChoices == null || personnasChoices === "") {
             personnasChoices = [];
@@ -84,7 +93,21 @@ class Emperor extends React.Component {
             personnasChoices = JSON.parse(personnasChoices.split(','));
         }
 
+        // types chosen by Ludi
+        chosenTypes = localStorage.getItem('chosenTypes');
+        if (chosenTypes == null || chosenTypes === "") {
+            chosenTypes = [];
+        }
+        else {
+            // convert datas string to list
+            chosenTypes = chosenTypes.split(",");
+            /*if(chosenTypes !== this.state.chosenTypes){
+                confirmationChoices = false;
+                personnasChoices = [];
+            }*/
+        }
 
+        // set stored datas
         this.setState({
             chosenTypes: chosenTypes,
             animal: animalActivated,
@@ -97,7 +120,13 @@ class Emperor extends React.Component {
         var activatedAnimal = this.state.animal;
 
         var choices;
-        if (this.state.confirmed) {
+        if (this.state.chosenTypes.length < 2) {
+            choices = <div className="GladiatorChoices">
+                Aucune sélection valide n'a encore été faite par tes Ludi. <br />
+                Je me permettrais de te suggérer de les houspiller un peu ...
+            </div>;
+        }
+        else if (this.state.confirmed) {
             choices = <div>
                 <p>Vous avez effectué les choix suivants :</p>
                 <div className="GladiatorChoices">
@@ -106,11 +135,6 @@ class Emperor extends React.Component {
                 <Button id="deleteChoicesButton" variant="contained" color="secondary" onClick={this.deleteChoices.bind(this)}>
                     Supprimer les choix
                 </Button>
-            </div>;
-        }
-        else if (this.state.chosenTypes.length < 2) {
-            choices = <div className="GladiatorChoices">
-                Aucune sélection valide n'a encore été faite par tes Ludi. Je me permettrai de te suggérer des les houspiller un peu ...
             </div>;
         }
         else {
@@ -123,6 +147,7 @@ class Emperor extends React.Component {
                         : <p>Le type 'Animal' n'est pas activé.</p>
                     }
                 </div>
+
                 {(this.state.animal && this.state.personnas.length === 3) || (this.state.animal === false && this.state.personnas.length === 2) ?
                     <Button id="confirmChoicesButton" variant="contained" color="primary" onClick={this.confirmChoices.bind(this)}>
                         Confirmer les choix
@@ -138,11 +163,12 @@ class Emperor extends React.Component {
                 <div className="Emperor">
                     <div className="InfoDiv">
                         <h2>Salut à toi, ô Empereur ! </h2>
-                        Tu vas ici pouvoir choisir les gladiateurs qui combattront, parmis ceux proposés par tes <i>Ludi</i>. <br />
-                        Pour chaque type de gladiateur, tu pourras choisir celui que tu souhaites, et lui affecter un modifier si cela t'est proposé.
-                        Tu pourras même inclure un animal au combat, toujours si cela t'est proposé bien sûr.<br />
-                        Une fois ton choix effectué, il ne restera plus qu'à confirmer ton choix !
+                        Tu vas ici pouvoir choisir les gladiateurs qui combattront, parmi ceux proposés par tes <i>Ludi</i>. <br />
+                        Pour chaque gladiateur, tu pourras également choisir une option d'équipement si cela t'est proposé !<br />
+                        Tu pourras même inclure un animal au combat, toujours si cela t'est proposé bien sûr.<br /> <br />
+                        Une fois ton choix effectué, il ne restera plus qu'à confirmer grâce au bouton qui apparaîtra !
                     </div>
+                    <hr/>
                     <div className="Selection">
                         {choices}
                     </div>

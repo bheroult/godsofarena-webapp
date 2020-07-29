@@ -5,8 +5,10 @@ import Typography from '@material-ui/core/Typography';
 
 class EmperorChoice extends React.Component {
     render() {
-        return (
-            <div className="EmperorChoice">
+        var card;
+
+        if (this.props.infos.number > 0) {
+            card = <div className="EmperorChoice">
                 <Card className="Card" variant="outlined">
                     <CardContent>
                         <Typography className="CardTitle" variant="h5" component="h2">
@@ -17,21 +19,22 @@ class EmperorChoice extends React.Component {
                         </Typography>
                         <Typography variant="body2" component="p">
                             <b>Type de modification :</b> {this.props.infos.modifier.title} <br />
-                            <b>Option sélectionnée :</b> {this.props.infos.modifier.option}
+                            <b>Option sélectionnée :</b> {this.props.infos.modifier.option} <br />
+                        </Typography>
+                        <Typography className="CardInfos" color="textSecondary">
+                            Nombre : {this.props.infos.number}
                         </Typography>
                     </CardContent>
                 </Card>
+            </div>;
+        }
+        else {
+            card = "";
+        }
 
-                {/*<h3>{this.props.infos.name}</h3>
-                <ul>
-                    <li><b>Type de gladiateur :</b> {this.props.infos.type}</li>
-                    <li><b>Modifier :</b>
-                        <ul>
-                            <li><b>Type de modification :</b> {this.props.infos.modifier.title}</li>
-                            <li><b>Option sélectionnée :</b> {this.props.infos.modifier.option}</li>
-                        </ul>
-                    </li>
-        </ul>*/}
+        return (
+            <div>
+                { card }
             </div>
         );
     }

@@ -2,12 +2,16 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 
+var backColor = '#86592d';
 const CustomButton = withStyles(() => ({
     root: {
         color: 'white',
-        backgroundColor: '#86592d',
+        backgroundColor: backColor,
         '&:hover': {
             backgroundColor: '#2d5a86',
+        },
+        '&:checked': {
+            backgroundColor: '#78862d',
         },
         margin: '15px 15px',
         width: '150px',
@@ -21,10 +25,9 @@ class ItemButton extends React.Component {
 
         this.state = {
             types: [],
-            chosenTypes: []
+            chosenTypes: [],
+            checked: true,
         };
-
-        //this.askToAddType = this.askToAddType.bind(this);
 
     }
 
@@ -35,7 +38,7 @@ class ItemButton extends React.Component {
     render() {
         const name = this.props.name;
         return (
-            <CustomButton variant="contained" size="large" onClick={this.askToAddType.bind(this)}>
+            <CustomButton variant="contained" size="large" onClick={this.askToAddType.bind(this)} >
                 {name}
             </CustomButton>
         );

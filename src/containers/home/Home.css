@@ -6,7 +6,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(5px + 2vmin);
   color: white;
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
@@ -15,5 +15,6 @@
   height: 50vmin;
   border: 5px solid black;
   border-radius: 25px;
+  padding-top: 5px;
 }
 

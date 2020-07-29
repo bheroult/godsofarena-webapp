@@ -1,10 +1,15 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import MuiAlert from '@material-ui/lab/Alert';
 
 import NavBar from '../../components/NavBar';
 import ItemButton from '../../components/ItemButton';
 
 import './ludus.css';
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 class Ludus extends React.Component {
     constructor(props) {
@@ -14,6 +19,8 @@ class Ludus extends React.Component {
             types: [],
             chosenTypes: [],
             animal: false,
+            // indicate if a message error has to be displayed
+            error: false,
         };
     }
 
@@ -25,6 +32,9 @@ class Ludus extends React.Component {
         if (index > -1) {
             // element already chosen, so delete it
             tempList.splice(index, 1);
+            this.setState({
+                error: false,
+            });
         }
         else if (name === 'Animal') {
             console.log("act : " + this.state.animal);
@@ -32,15 +42,22 @@ class Ludus extends React.Component {
             var activation = !this.state.animal;
             console.log("temp : " + activation);
             this.setState({
-                animal: activation
+                animal: activation,
+                error: false,
             });
             localStorage.setItem('animalActivated', activation);
-            console.log("temp : " + this.state.animal);
-
         }
         else if (this.state.chosenTypes.length < 2) {
             // add the element only if possible
             tempList.push(name);
+            this.setState({
+                error: false,
+            });
+        }
+        else {
+            this.setState({
+                error: true,
+            })
         }
 
         //update state and local storage
@@ -55,12 +72,13 @@ class Ludus extends React.Component {
         this.setState({
             chosenTypes: [],
             animal: false,
+            error: false,
         });
         localStorage.setItem('chosenTypes', []);
         localStorage.setItem('animalActivated', false);
 
         // clear options also for Emperor side
-        localStorage.setItem('personnas',[]);
+        localStorage.setItem('personnas', []);
         localStorage.setItem('confirmedChoices', false);
     }
 
@@ -88,7 +106,7 @@ class Ludus extends React.Component {
         if (chosenTypes == null || chosenTypes === "") {
             chosenTypes = [];
         }
-        else{
+        else {
             // convert datas string to list
             chosenTypes = chosenTypes.split(",");
         }
@@ -101,25 +119,42 @@ class Ludus extends React.Component {
 
     render() {
         var activatedAnimal = this.state.animal;
-        
+
         return (
             <div id="ludusContent">
                 <NavBar />
                 <div className="Ludus">
                     <div className="InfoSection">
-                        Choisissez les types de gladiateur que vous souhaitez proposez à l'Empereur. <br/>
-                        Vous devez choisir 2 types de gladiateur, et vous pouvez activez le type animal si vous le souhaitez.
+                        Choisissez les types de gladiateur que vous souhaitez proposer à l'Empereur. <br />
+                        Vous devez choisir 2 types de gladiateur pour que la sélection soit valide. <br />
+                        Vous pouvez aussi activez le type animal si vous le souhaitez.
+                    </div>
+                    <hr />
+                    <br />
+                    <div className="HintSection">
+                        Cliquez une fois sur un type pour l'ajouter à la liste des sélectionnés, cliquez de nouveau pour le retirer.
                     </div>
                     <div className="GladiatorTypes">
                         {this.state.types.map(item => (
                             <ItemButton key={item} name={item} callAddType={this.handleChosenType.bind(this)} />
                         ))}
                     </div>
+                    {this.state.error ?
+                        <Alert severity="warning">
+                            Vous ne pouvez pas sélectionner plus de 2 types de gladiateurs, hors Animal. 
+                            Retirez en un de la liste pour ajouter celui que vous voulez.
+                        </Alert>
+                        : <div></div>
+                    }
                     <br />
                     <div className="ChosenTypes">
-                        {this.state.chosenTypes.length === 0 ? "Vous n'avez choisi aucun type." : "Vous avez choisi les types suivants :"}<br />
-                        {this.state.chosenTypes.toString()} <br />
-                        Le type 'Animal' {activatedAnimal === true ? " est activé." : "n'est pas activé."}
+                        <p>
+                            Types sélectionnés : &nbsp;
+                            {this.state.chosenTypes.length === 0 ? "Vous n'avez choisi aucun type." : ""}
+                            <b> {this.state.chosenTypes.toString()} </b><br />
+                        </p><p>
+                            Le type 'Animal' <b>{activatedAnimal === true ? " est activé." : "n'est pas activé."}</b>
+                        </p>
                     </div>
                     <br />
                     <Button id="deleteChoicesButton" variant="contained" color="secondary" onClick={this.clearChoices.bind(this)}>

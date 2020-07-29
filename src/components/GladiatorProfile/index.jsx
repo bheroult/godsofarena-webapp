@@ -1,10 +1,12 @@
 import React from 'react';
+
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { withStyles } from '@material-ui/core/styles';
+import FilledInput from '@material-ui/core/FilledInput';
 
 import './gladiatorprofile.css';
 
@@ -32,6 +34,7 @@ const Label = withStyles(() => ({
 const SelectField = withStyles(() => ({
     root: {
         color: '#ffffff',
+        backgroundColor: '#862d3c',
     },
 }))(Select);
 
@@ -40,6 +43,13 @@ const HelperField = withStyles(() => ({
         color: '#ffffff',
     },
 }))(FormHelperText);
+
+const NumberField = withStyles(() => ({
+    root: {
+        color: '#ffffff',
+        backgroundColor: '#862d3c',
+    },
+}))(FilledInput);
 
 
 
@@ -57,6 +67,7 @@ class GladiatorProfile extends React.Component {
                     title: "",
                     option: ""
                 },
+                number: 1,
             },
             // to store options of the modifier
             modifierOptions: null,
@@ -76,51 +87,91 @@ class GladiatorProfile extends React.Component {
             .catch(err => console.error(err));
     }
 
+    // edit the name and reset other fields
     handleNameChange(event) {
         var name = event.target.value;
-        var tempPersonna = this.state.personna;
-        tempPersonna.name = name;
-        this.setState({
-            personna: tempPersonna,
-        });
 
-        // get title of the modifier is one is recorded
-        const gladiators = this.state.gladiators;
-        var i = 0;
-        var title = "";
-        while (i < gladiators.length && title === "") {
-            if (gladiators[i].name === name) {
-                title = gladiators[i].ModifierTitle;
-                tempPersonna.modifier.title = title;
-                this.setState({
-                    personna: tempPersonna,
-                });
-            }
-            i++;
-        }
-
-        // if there is a modifier, load its options
-        if (title !== "") {
-            this.loadModifier(title);
-        }
-    }
-
-    handleOptionChange(event) {
-        var tempPersonna = this.state.personna;
-        tempPersonna.modifier.option = event.target.value;
-
-        // update datas
-        const setting = new Promise((resolve, reject) => {
+        // don't change if value is empty
+        if (name != "") {
+            var tempPersonna = this.state.personna;
+            tempPersonna.name = name;
+            tempPersonna.modifier = {
+                title: "",
+                option: ""
+            };
             this.setState({
                 personna: tempPersonna,
             });
-            resolve();
-        });
 
-        // send new datas to parent element
-        setting.then(() => {
-            this.props.confirmPersonna(this.props.type, this.state.personna);
-        });
+            // get title of the modifier is one is recorded
+            const gladiators = this.state.gladiators;
+            var i = 0;
+            var title = "";
+            while (i < gladiators.length && title === "") {
+                if (gladiators[i].name === name) {
+                    title = gladiators[i].ModifierTitle;
+                    tempPersonna.modifier.title = title;
+                    this.setState({
+                        personna: tempPersonna,
+                    });
+                }
+                i++;
+            }
+
+            // if there is a modifier, load its options
+            if (title !== "") {
+                this.loadModifier(title);
+            }
+        }
+    }
+
+    // edit option
+    handleOptionChange(event) {
+        var option = event.target.value
+
+        // don't change if value is empty
+        if (option !== "") {
+            var tempPersonna = this.state.personna;
+            tempPersonna.modifier.option = option;
+
+            // update datas
+            const setting = new Promise((resolve, reject) => {
+                this.setState({
+                    personna: tempPersonna,
+                });
+                resolve();
+            });
+
+            // send new datas to parent element
+            setting.then(() => {
+                this.props.confirmPersonna(this.state.personna);
+            });
+        }
+    }
+
+    // edit number (only for animals)
+    handleNumberChange(event) {
+        var number = event.target.value;
+
+        // don't change if value is empty
+        if (number !== "" && number >- 1 ) {
+            var tempPersonna = this.state.personna;
+            tempPersonna.number = number;
+
+            // update datas
+            const setting = new Promise((resolve, reject) => {
+                this.setState({
+                    personna: tempPersonna,
+                });
+                resolve();
+            });
+
+            // send new datas to parent element
+            setting.then(() => {
+                this.props.confirmPersonna(this.state.personna);
+            });
+        }
+
     }
 
     componentDidMount() {
@@ -130,10 +181,10 @@ class GladiatorProfile extends React.Component {
             .then((data) => {
                 var tempPersonna = this.state.personna;
                 tempPersonna.type = this.props.type;
-                this.setState({ 
+                this.setState({
                     gladiators: JSON.parse(JSON.stringify(data)),
                     personna: tempPersonna,
-                 });
+                });
             })
             .catch(err => console.error(err));
 
@@ -141,11 +192,12 @@ class GladiatorProfile extends React.Component {
 
     render() {
         var modifiers;
+        var number;
 
         // if there is options of the modifier to load
         if (this.state.modifierOptions != null) {
             modifiers = <SelectionForm className="Form">
-                <Label id="demo-simple-select-required-label">Option d'armement</Label>
+                <Label id="demo-simple-select-required-label">Option d'équipement</Label>
                 <SelectField
                     labelId="demo-simple-select-required-label"
                     id="demo-simple-select-required"
@@ -166,6 +218,21 @@ class GladiatorProfile extends React.Component {
 
         }
 
+        // to indicate how many animals to put
+        if (this.props.type === 'Animal') {
+            number = <SelectionForm className="Form">
+                <Label id="demo-simple-select-required-label">Nombre d'animaux</Label>
+                <NumberField
+                    id="numberField"
+                    type="number"
+                    value={this.state.personna.number}
+                    onChange={this.handleNumberChange.bind(this)}
+                />
+                <HelperField>Obligatoire</HelperField>
+            </SelectionForm>;
+        }
+
+        // minimum : choose a name
         return (
             <div className="GladiatorProfile">
                 {this.props.type} <br />
@@ -193,6 +260,10 @@ class GladiatorProfile extends React.Component {
                 <br />
 
                 {modifiers}
+
+                <br />
+
+                {number}
 
             </div>
         );

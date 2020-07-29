@@ -7,7 +7,7 @@
     margin-right: 5%;
     text-align: center;
     font-size: calc(5px + 2vmin);
-    color: white;
+    color: #C0C0C0;
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     min-height: 100vh;
 }
@@ -17,14 +17,12 @@
     text-align: center;
 }
 
-.Selection {
-    
-}
 
 .GladiatorChoices {
-    min-height: 50vh;
+    min-height: 35vh;
     display: flex;
     flex-direction: line;
-    align-items: center;
-    justify-content: space-between;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    color: white;
 }
