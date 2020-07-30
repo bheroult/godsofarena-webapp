@@ -166,7 +166,7 @@ class Emperor extends React.Component {
                         Tu vas ici pouvoir choisir les gladiateurs qui combattront, parmi ceux proposés par tes <i>Ludi</i>. <br />
                         Pour chaque gladiateur, tu pourras également choisir une option d'équipement si cela t'est proposé !<br />
                         Tu pourras même inclure un animal au combat, toujours si cela t'est proposé bien sûr.<br /> <br />
-                        Une fois ton choix effectué, il ne restera plus qu'à confirmer grâce au bouton qui apparaîtra !
+                        Une fois tes choix effectués, il ne restera plus qu'à confirmer grâce au bouton qui apparaîtra !
                     </div>
                     <hr/>
                     <div className="Selection">

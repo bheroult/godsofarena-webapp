@@ -19,7 +19,7 @@ class EmperorChoice extends React.Component {
                         </Typography>
                         <Typography variant="body2" component="p">
                             <b>Type de modification :</b> {this.props.infos.modifier.title} <br />
-                            <b>Option sélectionnée :</b> {this.props.infos.modifier.option} <br />
+                            <b>Option activée :</b> {this.props.infos.modifier.option} <br />
                         </Typography>
                         <Typography className="CardInfos" color="textSecondary">
                             Nombre : {this.props.infos.number}

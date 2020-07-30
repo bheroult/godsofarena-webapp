@@ -88,6 +88,14 @@ class GladiatorProfile extends React.Component {
                     modifierOptions: datas
                 });
             })
+            .then(() => {
+                // if customisation is not activated, set default option 
+                // and confirm personna is valid
+                if (!this.state.optionsActivated) {
+                    console.log("modifierOptions : " + this.state.modifierOptions)
+                    this.optionChange(this.state.modifierOptions[0]);
+                }
+            })
             .catch(err => console.error(err));
     }
 
@@ -97,42 +105,58 @@ class GladiatorProfile extends React.Component {
 
         // don't change if value is empty
         if (name !== "") {
-            var tempPersonna = this.state.personna;
-            tempPersonna.name = name;
-            tempPersonna.modifier = {
-                title: "",
-                option: ""
-            };
-            this.setState({
-                personna: tempPersonna,
+            var optionTitle = "";
+
+            const settingPersonna = new Promise((resolve, reject) => {
+                var tempPersonna = this.state.personna;
+                tempPersonna.name = name;
+                tempPersonna.modifier = {
+                    title: "",
+                    option: ""
+                };
+                this.setState({
+                    personna: tempPersonna,
+                });
+
+                // get title of the modifier is one is recorded
+                const gladiators = this.state.gladiators;
+                var i = 0;
+                while (i < gladiators.length && optionTitle === "") {
+                    if (gladiators[i].name === name) {
+                        optionTitle = gladiators[i].ModifierTitle;
+                        tempPersonna.modifier.title = optionTitle;
+                        this.setState({
+                            personna: tempPersonna,
+                        });
+                    }
+                    i++;
+                }
+                resolve();
             });
 
-            // get title of the modifier is one is recorded
-            const gladiators = this.state.gladiators;
-            var i = 0;
-            var title = "";
-            while (i < gladiators.length && title === "") {
-                if (gladiators[i].name === name) {
-                    title = gladiators[i].ModifierTitle;
-                    tempPersonna.modifier.title = title;
-                    this.setState({
-                        personna: tempPersonna,
-                    });
+            settingPersonna.then(() => {
+                // if there is a modifier, load its options
+                if (optionTitle !== "") {
+                    this.loadModifier(optionTitle);
                 }
-                i++;
-            }
+                // else confirm personna is valid
+                else {
+                    this.props.confirmPersonna(this.state.personna);
+                }
 
-            // if there is a modifier, load its options
-            if (title !== "") {
-                this.loadModifier(title);
-            }
+
+            });
+
         }
     }
 
-    // edit option
+    // handle the change of an option
     handleOptionChange(event) {
-        var option = event.target.value
+        this.optionChange(event.target.value);
+    }
 
+    // edit option
+    optionChange(option) {
         // don't change if value is empty
         if (option !== "") {
             var tempPersonna = this.state.personna;
@@ -146,7 +170,7 @@ class GladiatorProfile extends React.Component {
                 resolve();
             });
 
-            // send new datas to parent element
+            // confirm personna is valid
             setting.then(() => {
                 this.props.confirmPersonna(this.state.personna);
             });
@@ -158,7 +182,7 @@ class GladiatorProfile extends React.Component {
         var number = event.target.value;
 
         // don't change if value is empty
-        if (number !== "" && number >- 1 ) {
+        if (number !== "" && number > - 1) {
             var tempPersonna = this.state.personna;
             tempPersonna.number = number;
 
@@ -192,17 +216,17 @@ class GladiatorProfile extends React.Component {
             })
             .catch(err => console.error(err));
 
-            var optionsActivated = localStorage.getItem('optionsActivated');
-            if (optionsActivated == null || optionsActivated === "false") {
-                optionsActivated = false;
-            }
-            else {
-                optionsActivated = true;
-            }
-    
-            this.setState({
-                optionsActivated: optionsActivated,
-            });
+        var optionsActivated = localStorage.getItem('optionsActivated');
+        if (optionsActivated == null || optionsActivated === "false") {
+            optionsActivated = false;
+        }
+        else {
+            optionsActivated = true;
+        }
+
+        this.setState({
+            optionsActivated: optionsActivated,
+        });
     }
 
     render() {
@@ -210,7 +234,7 @@ class GladiatorProfile extends React.Component {
         var number;
 
         // if there is options of the modifier to load
-        if (this.state.modifierOptions !== null /*&& this.state.optionsActivated*/) {
+        if (this.state.modifierOptions !== null && this.state.optionsActivated) {
             modifiers = <SelectionForm className="Form">
                 <Label id="demo-simple-select-required-label">Option d'équipement</Label>
                 <SelectField
