@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import MuiAlert from '@material-ui/lab/Alert';
+import Switch from '@material-ui/core/Switch';
 
 import NavBar from '../../components/NavBar';
 import ItemButton from '../../components/ItemButton';
@@ -21,6 +22,7 @@ class Ludus extends React.Component {
             animal: false,
             // indicate if a message error has to be displayed
             error: false,
+            optionsActivated: false,
         };
     }
 
@@ -67,15 +69,29 @@ class Ludus extends React.Component {
         localStorage.setItem('chosenTypes', tempList);
     }
 
+    handleOptionActivation(event) {
+        var tempActivation = !this.state.optionsActivated;
+
+        // set state
+        this.setState({
+            optionsActivated: tempActivation,
+        });
+
+        // set local storage
+        localStorage.setItem('optionsActivated', tempActivation);
+    }
+
     clearChoices() {
         // delete all choices everywhere
         this.setState({
             chosenTypes: [],
             animal: false,
             error: false,
+            optionsActivated: false,
         });
         localStorage.setItem('chosenTypes', []);
         localStorage.setItem('animalActivated', false);
+        localStorage.setItem('optionsActivated', false);
 
         // clear options also for Emperor side
         localStorage.setItem('personnas', []);
@@ -93,7 +109,8 @@ class Ludus extends React.Component {
             .catch(err => console.error(err));
 
         // check if choices were already made, and load them from local storage if so
-        var animalActivated, chosenTypes;
+        var animalActivated, chosenTypes, optionsActivated;
+
         animalActivated = localStorage.getItem('animalActivated');
         if (animalActivated == null || animalActivated === "false") {
             animalActivated = false;
@@ -110,9 +127,19 @@ class Ludus extends React.Component {
             // convert datas string to list
             chosenTypes = chosenTypes.split(",");
         }
+
+        optionsActivated = localStorage.getItem('optionsActivated');
+        if (optionsActivated == null || optionsActivated === "false") {
+            optionsActivated = false;
+        }
+        else {
+            optionsActivated = true;
+        }
+
         this.setState({
             chosenTypes: chosenTypes,
             animal: animalActivated,
+            optionsActivated: optionsActivated,
         });
     }
 
@@ -127,7 +154,7 @@ class Ludus extends React.Component {
                     <div className="InfoSection">
                         Choisissez les types de gladiateur que vous souhaitez proposer à l'Empereur. <br />
                         Vous devez choisir 2 types de gladiateur pour que la sélection soit valide. <br />
-                        Vous pouvez aussi activez le type animal si vous le souhaitez.
+                        Vous pouvez aussi activez le type animal ainsi la personnalisation d'équipement, si vous le souhaitez.
                     </div>
                     <hr />
                     <br />
@@ -141,20 +168,33 @@ class Ludus extends React.Component {
                     </div>
                     {this.state.error ?
                         <Alert severity="warning">
-                            Vous ne pouvez pas sélectionner plus de 2 types de gladiateurs, hors Animal. 
+                            Vous ne pouvez pas sélectionner plus de 2 types de gladiateurs, hors Animal.
                             Retirez en un de la liste pour ajouter celui que vous voulez.
                         </Alert>
                         : <div></div>
                     }
                     <br />
                     <div className="ChosenTypes">
-                        <p>
-                            Types sélectionnés : &nbsp;
+                        <div>
+                            <h5>Personnalisation d'équipement : </h5> <br />
+                            <Switch
+                                checked={this.state.optionsActivated}
+                                onChange={this.handleOptionActivation.bind(this)}
+                                name="checkedB"
+                                color="primary"
+                            />
+                            {this.state.optionsActivated ? "Activée" : "Désactivée"}
+                        </div>
+                        <div>
+                            <h5>Types sélectionnés : </h5> <br />
                             {this.state.chosenTypes.length === 0 ? "Vous n'avez choisi aucun type." : ""}
-                            <b> {this.state.chosenTypes.toString()} </b><br />
-                        </p><p>
-                            Le type 'Animal' <b>{activatedAnimal === true ? " est activé." : "n'est pas activé."}</b>
-                        </p>
+                            {this.state.chosenTypes.toString()}
+                        </div>
+                        <div>
+                            <h5>Le type 'Animal' </h5> <br />
+                            {activatedAnimal === true ? " est activé." : "n'est pas activé."}
+                        </div>
+
                     </div>
                     <br />
                     <Button id="deleteChoicesButton" variant="contained" color="secondary" onClick={this.clearChoices.bind(this)}>

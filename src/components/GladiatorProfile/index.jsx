@@ -53,6 +53,9 @@ const NumberField = withStyles(() => ({
 
 
 
+/**
+ * Component class
+ */
 class GladiatorProfile extends React.Component {
     constructor(props) {
         super(props);
@@ -71,6 +74,7 @@ class GladiatorProfile extends React.Component {
             },
             // to store options of the modifier
             modifierOptions: null,
+            optionsActivated: false,
         };
     }
 
@@ -92,7 +96,7 @@ class GladiatorProfile extends React.Component {
         var name = event.target.value;
 
         // don't change if value is empty
-        if (name != "") {
+        if (name !== "") {
             var tempPersonna = this.state.personna;
             tempPersonna.name = name;
             tempPersonna.modifier = {
@@ -188,6 +192,17 @@ class GladiatorProfile extends React.Component {
             })
             .catch(err => console.error(err));
 
+            var optionsActivated = localStorage.getItem('optionsActivated');
+            if (optionsActivated == null || optionsActivated === "false") {
+                optionsActivated = false;
+            }
+            else {
+                optionsActivated = true;
+            }
+    
+            this.setState({
+                optionsActivated: optionsActivated,
+            });
     }
 
     render() {
@@ -195,7 +210,7 @@ class GladiatorProfile extends React.Component {
         var number;
 
         // if there is options of the modifier to load
-        if (this.state.modifierOptions != null) {
+        if (this.state.modifierOptions !== null /*&& this.state.optionsActivated*/) {
             modifiers = <SelectionForm className="Form">
                 <Label id="demo-simple-select-required-label">Option d'équipement</Label>
                 <SelectField
